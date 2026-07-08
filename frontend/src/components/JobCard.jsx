@@ -1,86 +1,63 @@
-// export default function JobCard({ job }) {
-//   return (
-//     <div>
-//       <h3>{job.title}</h3>
-//       <h4>{job.company}</h4>
-//       <p>{job.description}</p>
-//       <ul>
-//         {job.techStack.map((techStack, idx) => (
-//           <li key={idx}>{techStack}</li>
-//         ))}
-//       </ul>
-//       <h6>Status: {job.status}</h6>
-//     </div>
-//   );
-// }
+import { Link } from "react-router-dom";
 
 export default function JobCard({ job }) {
-  // Dynamic color matching for the status badge
-  const statusColors =
-    job.status === "open"
-      ? "bg-green-100 text-green-800"
-      : "bg-gray-100 text-gray-800";
+  // Helper function to calculate relative "days ago" from MongoDB timestamps
+  const formatDaysAgo = (dateString) => {
+    if (!dateString) return "Recently";
+    const created = new Date(dateString);
+    const today = new Date();
+    const diffTime = Math.abs(today - created);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays === 0
+      ? "Today"
+      : diffDays === 1
+        ? "1 day ago"
+        : `${diffDays} days ago`;
+  };
 
   return (
-    <div className="max-w-md p-6 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="text-xl font-bold text-gray-900 leading-tight">
-          {job.title}
-        </h3>
-        <span
-          className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusColors}`}
-        >
-          {job.status}
-        </span>
-      </div>
-
-      {/* Company and Location row */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm mb-4">
-        <h4 className="font-semibold text-indigo-600">{job.company}</h4>
-        <span className="text-gray-300 hidden sm:inline">•</span>
-        <div className="flex items-center text-gray-500 font-medium">
-          {/* Inline SVG Location Pin Icon */}
-          <svg
-            className="w-4 h-4 mr-1 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-          {job.location}
-        </div>
-      </div>
-
-      <p className="text-gray-600 text-sm mb-5 leading-relaxed">
-        {job.description.slice(0, 120)}...
-      </p>
-
+    <div className="w-full max-w-sm p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-[250px]">
       <div>
-        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400 block mb-2">
-          Tech Stack
+        {/* Title & Company */}
+        <div className="mb-3">
+          <h3 className="text-lg font-bold text-gray-900 leading-snug line-clamp-1">
+            {job.title}
+          </h3>
+          <p className="text-sm font-semibold text-indigo-600 line-clamp-1">
+            {job.company?.name || job.company}
+          </p>
+        </div>
+
+        {/* Location & Salary Meta Metadata */}
+        <div className="flex items-center gap-x-4 text-xs font-medium text-gray-500 mb-4">
+          <span className="flex items-center">
+            <span className="mr-1">📍</span> {job.location}
+          </span>
+          <span className="flex items-center">
+            <span className="mr-1">💰</span>
+            {job.salary && job.salary.min != null && job.salary.max != null
+              ? `€${job.salary.min}–${job.salary.max}`
+              : job.salary || "Not specified"}
+          </span>
+        </div>
+
+        {/* Minimal Stack String Line */}
+        <p className="text-xs font-medium text-gray-400 line-clamp-1 mb-4">
+          {job.requiredSkills?.join(" • ") || "No skills listed"}
+        </p>
+      </div>
+
+      {/* Footer Row: Timestamp and Call-to-Action */}
+      <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+        <span className="text-xs text-gray-400 font-medium">
+          Posted {formatDaysAgo(job.createdAt)}
         </span>
-        <ul className="flex flex-wrap gap-2">
-          {job.techStack.map((tech, idx) => (
-            <li
-              key={idx}
-              className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md border border-gray-200"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
+        <Link
+          to={`/jobs/${job._id}`}
+          className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100/80 px-3 py-1.5 rounded-lg transition-colors"
+        >
+          View Details
+        </Link>
       </div>
     </div>
   );
