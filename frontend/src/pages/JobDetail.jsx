@@ -31,7 +31,7 @@ export default function JobDetails() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
       <Navbar />
 
-      <main className="max-w-3xl w-full mx-auto px-4 py-12 flex-grow">
+      <main className="max-w-3xl w-full mx-auto px-4 py-12 grow">
         {/* Back Link */}
         <Link
           to="/jobs"
