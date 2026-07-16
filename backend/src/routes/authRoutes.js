@@ -4,9 +4,9 @@ const router = express.Router();
 const {
   registerUser,
   loginUser,
-  getUser,
-  logoutUser,
   refreshToken,
+  logoutUser,
+  getUser,
 } = require("../controllers/authController");
 
 const validateToken = require("../middleware/authMiddleware");

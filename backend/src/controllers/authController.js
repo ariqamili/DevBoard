@@ -269,11 +269,11 @@ const logoutUser = async (req, res) => {
 };
 
 module.exports = {
-  getUser,
   registerUser,
   loginUser,
   refreshToken,
   logoutUser,
+  getUser,
 };
 
 // const User = require("../models/User");

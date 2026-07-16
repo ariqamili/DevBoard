@@ -32,3 +32,5 @@ const validateToken = async (req, res, next) => {
       .json({ success: false, message: "Invalid or expired token" });
   }
 };
+
+module.exports = validateToken;
