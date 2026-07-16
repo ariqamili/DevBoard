@@ -4,12 +4,10 @@ const User = require("../models/User");
 const validateToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer "))
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: "Not authorized, invalid token format",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized, invalid token format",
+    });
 
   const token = authHeader.split(" ")[1];
   try {
@@ -23,7 +21,12 @@ const validateToken = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error(error);
+    if (
+      error.name !== "TokenExpiredError" &&
+      error.name !== "JsonWebTokenError"
+    ) {
+      console.error(error);
+    }
     return res
       .status(401)
       .json({ success: false, message: "Invalid or expired token" });
