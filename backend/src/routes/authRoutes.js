@@ -13,8 +13,8 @@ const validateToken = require("../middleware/authMiddleware");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/me", validateToken, getUser);
-router.post("/logout", validateToken, logoutUser);
 router.post("/refresh", refreshToken);
+router.post("/logout", logoutUser);
+router.get("/me", validateToken, getUser);
 
 module.exports = router;
