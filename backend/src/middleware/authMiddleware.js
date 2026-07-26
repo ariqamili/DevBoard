@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const buildUserResponse = require("../utils/buildUserResponse");
 
 const validateToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -18,7 +19,7 @@ const validateToken = async (req, res, next) => {
         .status(401)
         .json({ success: false, message: "User no longer exists" });
 
-    req.user = user;
+    req.user = buildUserResponse(user);
     next();
   } catch (error) {
     if (
