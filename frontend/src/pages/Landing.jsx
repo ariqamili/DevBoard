@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import JobCard from "../components/JobCard";
 import Spinner from "../components/Spinner";
-import { getJobs } from "../services/jobService";
+import jobService from "../services/jobService";
 
 export default function Landing() {
   const [latestJobs, setLatestJobs] = useState([]);
@@ -15,7 +15,7 @@ export default function Landing() {
     async function fetchJobs() {
       try {
         setIsLoading(true);
-        const response = await getJobs();
+        const response = await jobService.getJobs();
         setLatestJobs(response.data.slice(0, 5));
       } catch (err) {
         console.error("Failed to load backend job postings:", err);

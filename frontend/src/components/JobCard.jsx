@@ -16,7 +16,7 @@ export default function JobCard({ job }) {
   };
 
   return (
-    <div className="w-full max-w-sm p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-[250px]">
+    <div className="w-full max-w-sm p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-62.5">
       <div>
         {/* Title & Company */}
         <div className="mb-3">
@@ -24,7 +24,9 @@ export default function JobCard({ job }) {
             {job.title}
           </h3>
           <p className="text-sm font-semibold text-indigo-600 line-clamp-1">
-            {job.company?.name || job.company}
+            {job.companyProfile?.companyName ||
+              job.companyProfile?.user?.email ||
+              "Unknown company"}
           </p>
         </div>
 
