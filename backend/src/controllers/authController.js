@@ -10,6 +10,7 @@ const buildUserResponse = require("../utils/buildUserResponse");
 // ---- Constants ----
 const REFRESH_TOKEN_LIFETIME = 15 * 24 * 60 * 60 * 1000; // 15 days
 const MAX_SESSIONS = 5;
+const isProd = process.env.NODE_ENV === "production";
 
 // ---- Errors ----
 class AuthError extends Error {
@@ -22,15 +23,15 @@ class AuthError extends Error {
 // ---- Cookie config ----
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
   maxAge: REFRESH_TOKEN_LIFETIME,
 };
 
 const clearCookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
 };
 
 // ---- Helpers ----
