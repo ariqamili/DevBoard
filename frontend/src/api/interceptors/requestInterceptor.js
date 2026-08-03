@@ -1,17 +1,16 @@
-import api from "../axios";
 import { getAccessTokenForApi } from "../tokenManager";
 
-api.interceptors.request.use(
-  (config) => {
-    const token = getAccessTokenForApi();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+export default function setupRequestInterceptor(api) {
+  api.interceptors.request.use(
+    (config) => {
+      const token = getAccessTokenForApi();
 
-    return config;
-  },
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+      return config;
+    },
+    (error) => Promise.reject(error),
+  );
+}

@@ -1,11 +1,14 @@
 import axios from "axios";
 
+import setupRequestInterceptor from "./interceptors/requestInterceptor";
+import setupResponseInterceptor from "./interceptors/responseInterceptor";
+
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
   withCredentials: true,
 });
 
-export default api;
+setupRequestInterceptor(api);
+setupResponseInterceptor(api);
 
-import "./interceptors/requestInterceptor";
-import "./interceptors/responseInterceptor";
+export default api;
