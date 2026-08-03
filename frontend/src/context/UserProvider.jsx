@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import authService from "../services/authService";
 import { UserContext } from "./UserContext";
 import { setAccessTokenForApi } from "../api/tokenManager";
@@ -31,6 +31,8 @@ export function UserProvider({ children }) {
     async (credentials) => {
       const response = await authService.register(credentials);
       applyAuthentication(response.data);
+
+      return response.data;
     },
     [applyAuthentication],
   );
@@ -39,6 +41,8 @@ export function UserProvider({ children }) {
     async (credentials) => {
       const response = await authService.login(credentials);
       applyAuthentication(response.data);
+
+      return response.data;
     },
     [applyAuthentication],
   );
@@ -64,7 +68,12 @@ export function UserProvider({ children }) {
     return () => registerLogoutCallback(null); // cleanup
   }, [clearAuthState]);
 
+  const hasInitialized = useRef(false);
+
   useEffect(() => {
+    if (hasInitialized.current) return; // StrictMode's second invocation — skip entirely
+    hasInitialized.current = true;
+
     const initializeAuth = async () => {
       try {
         const response = await authService.refresh();
