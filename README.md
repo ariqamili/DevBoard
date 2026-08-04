@@ -282,7 +282,7 @@ PORT=5000
 
 NODE_ENV=development
 
-MONGO_URI=your_mongodb_connection
+MONGO_URI=mongodb+srv://ariqamili_db_user:devboard123@devboard.0dzer0e.mongodb.net/?appName=devboard
 
 ACCESS_TOKEN_SECRET=your_secret
 
